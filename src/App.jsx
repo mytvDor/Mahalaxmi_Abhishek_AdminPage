@@ -180,9 +180,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<ProtectedBookingWrapper />} />
         <Route path="/booking" element={<ProtectedBookingWrapper />} />
-        <Route path="/admin/dashboard" element={<ProtectedBookingWrapper />} />
+        <Route path="/admin" element={<ProtectedBookingWrapper />} />
       </Routes>
     </Router>
   );
