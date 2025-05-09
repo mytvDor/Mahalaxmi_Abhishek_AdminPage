@@ -114,10 +114,10 @@
 import { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-import AbhishekBooking from "./userComponents/AbhishekBooking";
-import SareeUpload from "./Admin/SareeUpload";
-import AdminDashboard from "./Admin/AdminDashboard";
-import SareeGalleryUser from "./userComponents/SareeGalleryUser";
+// import AbhishekBooking from "./userComponents/AbhishekBooking";
+// import SareeUpload from "./Admin/SareeUpload";
+// import AdminDashboard from "./Admin/AdminDashboard";
+// import SareeGalleryUser from "./userComponents/SareeGalleryUser";
 import Home from "./Home";
 import BookingsManagement from "./Admin/Dashboard/BookingManagementAdmin";
 
