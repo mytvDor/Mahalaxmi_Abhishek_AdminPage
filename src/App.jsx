@@ -1,176 +1,159 @@
-// // // import { useState } from "react";
-// // // import reactLogo from "./assets/react.svg";
-// // // import viteLogo from "/vite.svg";
-// // // import "./App.css";
-// // // import AbhishekBooking from "./userComponents/AbhishekBooking";
-// // // import SareeUpload from "./Admin/SareeUpload";
-// // // import AdminDashboard from "./Admin/AdminDashboard";
-// // // import BuySareeForm from "./userComponents/BuySareeForm";
-// // // import SareeGalleryUser from "./userComponents/SareeGalleryUser";
-// // // // import "./userComponents/AbhishekBooking";
 
-// // // function App() {
-// // //   const [count, setCount] = useState(0);
-
-// // //   return (
-// // //     <>
-// // //       <AbhishekBooking />
-// // //       <SareeUpload />
-// // //       <SareeGalleryUser></SareeGalleryUser>
-// // //       <AdminDashboard />
-// // //     </>
-// // //   );
-// // // }
-
-// // // export default App;
-// // import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-// // import "./App.css";
-// // import AbhishekBooking from "./userComponents/AbhishekBooking";
-// // import SareeUpload from "./Admin/SareeUpload";
-// // import AdminDashboard from "./Admin/AdminDashboard";
-// // import SareeGalleryUser from "./userComponents/SareeGalleryUser";
-// // import Home from "./Home"; // Create a simple Home page (optional)
-// // import Navbar from "./Navbar"; // Optional: Create a navigation bar
-// // import BookingsManagement from "./Admin/Dashboard/BookingManagementAdmin";
-
-// // function App() {
-// //   return (
-// //     <Router>
-// //       {/* <Navbar /> */}
-// //       <Routes>
-// //         <Route path="/" element={<Home />} />
-// //         <Route path="/booking" element={<AbhishekBooking />} />
-// //         {/* <Route path="/saree" element={<SareeGalleryUser />} />
-
-// //                   <Route path="upload-saree" element={<SareeUpload />} />
-// // */}
-
-// //         <Route path="/admin">
-// //           <Route path="dashboard" element={<BookingsManagement />} />
-// //         </Route>
-// //       </Routes>
-// //     </Router>
-// //   );
-// // }
-
-// // export default App;
-// // userComponents/ProtectedBooking.js
-// import { useState } from "react";
-// import AbhishekBooking from "./AbhishekBooking";
-
-// function ProtectedBooking() {
-//   const [password, setPassword] = useState("");
-//   const [isAuthenticated, setIsAuthenticated] = useState(false);
-//   const [error, setError] = useState("");
-
-//   const handleSubmit = async (e) => {
-//     e.preventDefault();
-//     const response = await fetch("http://localhost:5000/api/verify-booking-password", {
-//       method: "POST",
-//       headers: { "Content-Type": "application/json" },
-//       body: JSON.stringify({ password }),
-//     });
-
-//     const data = await response.json();
-//     if (data.success) {
-//       setIsAuthenticated(true);
-//     } else {
-//       setError("Incorrect password");
-//     }
-//   };
-
-//   if (isAuthenticated) {
-//     return <AbhishekBooking />;
-//   }
-
-//   return (
-//     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-4">
-//       <form
-//         onSubmit={handleSubmit}
-//         className="bg-white p-6 rounded shadow-md w-full max-w-sm"
-//       >
-//         <h2 className="text-lg font-semibold mb-4">Enter Password to Book</h2>
-//         <input
-//           type="password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//           className="border px-3 py-2 w-full mb-3"
-//           placeholder="Enter password"
-//           required
-//         />
-//         {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
-//         <button
-//           type="submit"
-//           className="bg-blue-600 text-white px-4 py-2 rounded w-full"
-//         >
-//           Submit
-//         </button>
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default ProtectedBooking;
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./App.css";
-// import AbhishekBooking from "./userComponents/AbhishekBooking";
-// import SareeUpload from "./Admin/SareeUpload";
-// import AdminDashboard from "./Admin/AdminDashboard";
-// import SareeGalleryUser from "./userComponents/SareeGalleryUser";
-import Home from "./Home";
 import BookingsManagement from "./Admin/Dashboard/BookingManagementAdmin";
+
+const API_URL = "https://mahalaxmisite-backend.onrender.com";
+const AUTH_KEY = "mahalaxmi_booking_auth";
+const AUTH_DURATION = 24 * 60 * 60 * 1000; // 24 hours
 
 function ProtectedBookingWrapper() {
   const [password, setPassword] = useState("");
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Restore login after refresh, but only for 24 hours.
+  useEffect(() => {
+    try {
+      const savedAuth = localStorage.getItem(AUTH_KEY);
+
+      if (savedAuth) {
+        const auth = JSON.parse(savedAuth);
+
+        if (
+          auth?.authenticated === true &&
+          typeof auth.expiresAt === "number" &&
+          Date.now() < auth.expiresAt
+        ) {
+          setIsAuthenticated(true);
+        } else {
+          localStorage.removeItem(AUTH_KEY);
+        }
+      }
+    } catch (err) {
+      console.error("Could not restore login:", err);
+      localStorage.removeItem(AUTH_KEY);
+    } finally {
+      setCheckingAuth(false);
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch(
-      "https://mahalaxmisite-backend.onrender.com/api/verify-booking-password",
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password }),
-      }
-    );
+    setError("");
+    setLoading(true);
 
-    const data = await response.json();
-    if (data.success) {
+    try {
+      const response = await fetch(
+        `${API_URL}/api/verify-booking-password`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ password }),
+        }
+      );
+
+      const data = await response.json();
+
+      if (!response.ok || !data.success) {
+        setError(data.message || "Incorrect password. Please try again.");
+        return;
+      }
+
+      const expiresAt = Date.now() + AUTH_DURATION;
+
+      localStorage.setItem(
+        AUTH_KEY,
+        JSON.stringify({
+          authenticated: true,
+          expiresAt,
+        })
+      );
+
       setIsAuthenticated(true);
-    } else {
-      setError("Incorrect password");
+      setPassword("");
+    } catch (err) {
+      console.error("Login failed:", err);
+      setError("Unable to connect to the server. Please try again.");
+    } finally {
+      setLoading(false);
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem(AUTH_KEY);
+    setIsAuthenticated(false);
+    setPassword("");
+  };
+
+  if (checkingAuth) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p>Checking login...</p>
+      </div>
+    );
+  }
+
   if (isAuthenticated) {
-    return <BookingsManagement />;
+    return (
+      <div>
+        <div className="flex justify-end p-3">
+          <button
+            type="button"
+            onClick={handleLogout}
+            className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-700"
+          >
+            Logout
+          </button>
+        </div>
+
+        <BookingsManagement />
+      </div>
+    );
   }
 
   return (
     <div className="min-h-screen flex flex-col justify-center items-center bg-gray-100 p-4">
       <form
         onSubmit={handleSubmit}
-        className="bg-white p-6 rounded shadow-md w-full max-w-sm"
+        className="bg-white p-6 rounded-xl shadow-md w-full max-w-sm"
       >
-        <h2 className="text-lg font-semibold mb-4">Enter Password to Book</h2>
+        <h2 className="text-lg font-semibold mb-4">
+          Enter Password to Continue
+        </h2>
+
         <input
-          type="text"
+          type="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border px-3 py-2 w-full mb-3"
+          className="border rounded px-3 py-2 w-full mb-3"
           placeholder="Enter password"
+          autoComplete="current-password"
           required
         />
-        {error && <p className="text-red-500 text-sm mb-2">{error}</p>}
+
+        {error && (
+          <p role="alert" className="text-red-600 text-sm mb-3">
+            {error}
+          </p>
+        )}
+
         <button
           type="submit"
-          className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+          disabled={loading}
+          className="bg-blue-600 text-white px-4 py-2 rounded w-full disabled:opacity-60"
         >
-          Submit
+          {loading ? "Verifying..." : "Login"}
         </button>
+
+        <p className="text-xs text-gray-500 mt-3 text-center">
+          Login remains active for 24 hours.
+        </p>
       </form>
     </div>
   );
