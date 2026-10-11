@@ -977,41 +977,46 @@ export default function BookingsManagement() {
               />
             </div>
 
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger aria-label="Filter completion status">
-                <SelectValue placeholder="Filter status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="incomplete">Incomplete only</SelectItem>
-                <SelectItem value="completed">Completed only</SelectItem>
-                <SelectItem value="all">All bookings</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger aria-label="Sort bookings">
-                <SelectValue placeholder="Sort bookings" />
-              </SelectTrigger>
+            <div className="grid grid-cols-2 gap-2 w-full">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger
+                  aria-label="Filter completion status"
+                  className="w-full min-w-0 text-xs sm:text-sm"
+                >
+                  <SelectValue placeholder="Filter status" />
+                </SelectTrigger>
 
-              <SelectContent>
-                <SelectItem value="newest">
-                  Newest submitted first (default)
-                </SelectItem>
+                <SelectContent>
+                  <SelectItem value="incomplete">Incomplete only</SelectItem>
+                  <SelectItem value="completed">Completed only</SelectItem>
+                  <SelectItem value="all">All bookings</SelectItem>
+                </SelectContent>
+              </Select>
 
-                <SelectItem value="oldest">Oldest submitted first</SelectItem>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger
+                  aria-label="Sort bookings"
+                  className="w-full min-w-0 text-xs sm:text-sm"
+                >
+                  <SelectValue placeholder="Sort bookings" />
+                </SelectTrigger>
 
-                <SelectItem value="bookingNewest">
-                  Latest booking date first
-                </SelectItem>
-
-                <SelectItem value="bookingOldest">
-                  Earliest booking date first
-                </SelectItem>
-
-                <SelectItem value="nameAsc">Name A–Z</SelectItem>
-
-                <SelectItem value="nameDesc">Name Z–A</SelectItem>
-              </SelectContent>
-            </Select>
+                <SelectContent>
+                  <SelectItem value="newest">
+                    Newest submitted first (default)
+                  </SelectItem>
+                  <SelectItem value="oldest">Oldest submitted first</SelectItem>
+                  <SelectItem value="bookingNewest">
+                    Latest booking date first
+                  </SelectItem>
+                  <SelectItem value="bookingOldest">
+                    Earliest booking date first
+                  </SelectItem>
+                  <SelectItem value="nameAsc">Name A–Z</SelectItem>
+                  <SelectItem value="nameDesc">Name Z–A</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           {loading ? (
