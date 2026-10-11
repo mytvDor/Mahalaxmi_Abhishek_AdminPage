@@ -1,1195 +1,4 @@
-// // // // import { useState, useEffect } from "react";
-// // // // import axios from "axios";
-// // // // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// // // // import { Button } from "@/components/ui/button";
-// // // // import {
-// // // //   Table,
-// // // //   TableBody,
-// // // //   TableCell,
-// // // //   TableHead,
-// // // //   TableHeader,
-// // // //   TableRow,
-// // // // } from "@/components/ui/table";
-// // // // import {
-// // // //   Dialog,
-// // // //   DialogContent,
-// // // //   DialogDescription,
-// // // //   DialogFooter,
-// // // //   DialogHeader,
-// // // //   DialogTitle,
-// // // // } from "@/components/ui/dialog";
-// // // // import { Alert, AlertDescription } from "@/components/ui/alert";
-// // // // import { Eye, Trash } from "lucide-react";
-
-// // // // export default function BookingManagementAdmin() {
-// // // //   const [bookings, setBookings] = useState([]);
-// // // //   const [loading, setLoading] = useState(true);
-// // // //   const [error, setError] = useState("");
-// // // //   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-// // // //   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-// // // //   const [currentBooking, setCurrentBooking] = useState(null);
-
-// // // //   useEffect(() => {
-// // // //     fetchBookings();
-// // // //   }, []);
-
-// // // //   const fetchBookings = async () => {
-// // // //     try {
-// // // //       setLoading(true);
-// // // //       const response = await axios.get("https://mahalaxmisite-backend.onrender.com/bookings");
-// // // //       setBookings(response.data);
-// // // //       setError("");
-// // // //     } catch (error) {
-// // // //       console.error("Error fetching bookings:", error);
-// // // //       setError("Failed to load bookings. Please try again.");
-// // // //     } finally {
-// // // //       setLoading(false);
-// // // //     }
-// // // //   };
-
-// // // //   const handleDelete = async () => {
-// // // //     try {
-// // // //       await axios.delete(
-// // // //         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`
-// // // //       );
-// // // //       fetchBookings();
-// // // //       setIsDeleteModalOpen(false);
-// // // //       setCurrentBooking(null);
-// // // //     } catch (error) {
-// // // //       console.error("Error deleting booking:", error);
-// // // //       setError("Failed to delete booking. Please try again.");
-// // // //     }
-// // // //   };
-
-// // // //   const openViewModal = (booking) => {
-// // // //     setCurrentBooking(booking);
-// // // //     setIsViewModalOpen(true);
-// // // //   };
-
-// // // //   const openDeleteModal = (booking) => {
-// // // //     setCurrentBooking(booking);
-// // // //     setIsDeleteModalOpen(true);
-// // // //   };
-
-// // // //   const formatDate = (dateString) => {
-// // // //     return new Date(dateString).toLocaleString();
-// // // //   };
-
-// // // //   return (
-// // // //     <Card>
-// // // //       <CardHeader className="flex flex-row items-center justify-between">
-// // // //         <CardTitle>Bookings Management</CardTitle>
-// // // //         <Button onClick={fetchBookings} variant="outline">
-// // // //           Refresh
-// // // //         </Button>
-// // // //       </CardHeader>
-// // // //       <CardContent>
-// // // //         {error && (
-// // // //           <Alert variant="destructive" className="mb-4">
-// // // //             <AlertDescription>{error}</AlertDescription>
-// // // //           </Alert>
-// // // //         )}
-
-// // // //         {loading ? (
-// // // //           <div className="text-center p-6">Loading bookings...</div>
-// // // //         ) : bookings.length === 0 ? (
-// // // //           <div className="text-center p-10">
-// // // //             <p className="text-lg text-gray-600">No bookings found</p>
-// // // //           </div>
-// // // //         ) : (
-// // // //           <Table>
-// // // //             <TableHeader>
-// // // //               <TableRow>
-// // // //                 <TableHead>Name</TableHead>
-// // // //                 <TableHead>Phone</TableHead>
-// // // //                 <TableHead>Date</TableHead>
-// // // //                 <TableHead>Time</TableHead>
-// // // //                 <TableHead className="text-right">Actions</TableHead>
-// // // //               </TableRow>
-// // // //             </TableHeader>
-// // // //             <TableBody>
-// // // //               {bookings.map((booking) => (
-// // // //                 <TableRow key={booking._id}>
-// // // //                   <TableCell>{booking.name}</TableCell>
-// // // //                   <TableCell>{booking.phone}</TableCell>
-// // // //                   <TableCell>{formatDate(booking.bookingDateTime)}</TableCell>
-// // // //                   <TableCell>{booking.time}</TableCell>
-// // // //                   <TableCell className="text-right">
-// // // //                     <Button
-// // // //                       variant="outline"
-// // // //                       size="icon"
-// // // //                       className="mr-2"
-// // // //                       onClick={() => openViewModal(booking)}
-// // // //                     >
-// // // //                       <Eye className="h-4 w-4" />
-// // // //                     </Button>
-// // // //                     <Button
-// // // //                       variant="outline"
-// // // //                       size="icon"
-// // // //                       onClick={() => openDeleteModal(booking)}
-// // // //                     >
-// // // //                       <Trash className="h-4 w-4" />
-// // // //                     </Button>
-// // // //                   </TableCell>
-// // // //                 </TableRow>
-// // // //               ))}
-// // // //             </TableBody>
-// // // //           </Table>
-// // // //         )}
-// // // //       </CardContent>
-
-// // // //       {/* View Modal */}
-// // // //       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-// // // //         <DialogContent>
-// // // //           <DialogHeader>
-// // // //             <DialogTitle>Booking Details</DialogTitle>
-// // // //           </DialogHeader>
-// // // //           {currentBooking && (
-// // // //             <div>
-// // // //               <p>
-// // // //                 <strong>Name:</strong> {currentBooking.name}
-// // // //               </p>
-// // // //               <p>
-// // // //                 <strong>Phone:</strong> {currentBooking.phone}
-// // // //               </p>
-// // // //               <p>
-// // // //                 <strong>Date & Time:</strong> {currentBooking.bookingDateTime}
-// // // //               </p>
-// // // //             </div>
-// // // //           )}
-// // // //           <DialogFooter>
-// // // //             <Button onClick={() => setIsViewModalOpen(false)}>Close</Button>
-// // // //           </DialogFooter>
-// // // //         </DialogContent>
-// // // //       </Dialog>
-
-// // // //       {/* Delete Confirmation Modal */}
-// // // //       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-// // // //         <DialogContent>
-// // // //           <DialogHeader>
-// // // //             <DialogTitle>Confirm Deletion</DialogTitle>
-// // // //           </DialogHeader>
-// // // //           <DialogDescription>
-// // // //             Are you sure you want to delete this booking? This action cannot be
-// // // //             undone.
-// // // //           </DialogDescription>
-// // // //           <DialogFooter>
-// // // //             <Button variant="destructive" onClick={handleDelete}>
-// // // //               Delete
-// // // //             </Button>
-// // // //             <Button onClick={() => setIsDeleteModalOpen(false)}>Cancel</Button>
-// // // //           </DialogFooter>
-// // // //         </DialogContent>
-// // // //       </Dialog>
-// // // //     </Card>
-// // // //   );
-// // // // }
-
-// // // import { useState, useEffect } from "react";
-// // // import axios from "axios";
-// // // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// // // import { Button } from "@/components/ui/button";
-// // // import {
-// // //   Table,
-// // //   TableBody,
-// // //   TableCell,
-// // //   TableHead,
-// // //   TableHeader,
-// // //   TableRow,
-// // // } from "@/components/ui/table";
-// // // import {
-// // //   Dialog,
-// // //   DialogContent,
-// // //   DialogDescription,
-// // //   DialogFooter,
-// // //   DialogHeader,
-// // //   DialogTitle,
-// // // } from "@/components/ui/dialog";
-// // // import { Alert, AlertDescription } from "@/components/ui/alert";
-// // // import { Eye, Trash, Edit } from "lucide-react";
-
-// // // export default function BookingsManagement() {
-// // //   const [bookings, setBookings] = useState([]);
-// // //   const [loading, setLoading] = useState(true);
-// // //   const [error, setError] = useState("");
-// // //   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-// // //   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-// // //   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-// // //   const [currentBooking, setCurrentBooking] = useState(null);
-// // //   const [editedBooking, setEditedBooking] = useState({});
-
-// // //   useEffect(() => {
-// // //     fetchBookings();
-// // //   }, []);
-
-// // //   const fetchBookings = async () => {
-// // //     try {
-// // //       setLoading(true);
-// // //       const response = await axios.get("https://mahalaxmisite-backend.onrender.com/bookings");
-// // //       setBookings(response.data);
-// // //       setError("");
-// // //     } catch (error) {
-// // //       console.error("Error fetching bookings:", error);
-// // //       setError("Failed to load bookings. Please try again.");
-// // //     } finally {
-// // //       setLoading(false);
-// // //     }
-// // //   };
-
-// // //   const handleDelete = async () => {
-// // //     try {
-// // //       await axios.delete(
-// // //         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`
-// // //       );
-// // //       fetchBookings();
-// // //       setIsDeleteModalOpen(false);
-// // //       setCurrentBooking(null);
-// // //     } catch (error) {
-// // //       console.error("Error deleting booking:", error);
-// // //       setError("Failed to delete booking. Please try again.");
-// // //     }
-// // //   };
-
-// // //   const handleEdit = async () => {
-// // //     try {
-// // //       await axios.put(
-// // //         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`,
-// // //         editedBooking
-// // //       );
-// // //       fetchBookings();
-// // //       setIsEditModalOpen(false);
-// // //       setCurrentBooking(null);
-// // //     } catch (error) {
-// // //       console.error("Error updating booking:", error);
-// // //       setError("Failed to update booking. Please try again.");
-// // //     }
-// // //   };
-
-// // //   const openViewModal = (booking) => {
-// // //     setCurrentBooking(booking);
-// // //     setIsViewModalOpen(true);
-// // //   };
-
-// // //   const openDeleteModal = (booking) => {
-// // //     setCurrentBooking(booking);
-// // //     setIsDeleteModalOpen(true);
-// // //   };
-
-// // //   const openEditModal = (booking) => {
-// // //     setCurrentBooking(booking);
-// // //     setEditedBooking(booking);
-// // //     setIsEditModalOpen(true);
-// // //   };
-
-// // //   const formatDate = (dateString) => {
-// // //     return new Date(dateString).toLocaleString();
-// // //   };
-
-// // //   return (
-// // //     <Card>
-// // //       <CardHeader className="flex flex-row items-center justify-between">
-// // //         <CardTitle>Bookings Management</CardTitle>
-// // //         <Button onClick={fetchBookings} variant="outline">
-// // //           Refresh
-// // //         </Button>
-// // //       </CardHeader>
-// // //       <CardContent>
-// // //         {error && (
-// // //           <Alert variant="destructive" className="mb-4">
-// // //             <AlertDescription>{error}</AlertDescription>
-// // //           </Alert>
-// // //         )}
-
-// // //         {loading ? (
-// // //           <div className="text-center p-6">Loading bookings...</div>
-// // //         ) : bookings.length === 0 ? (
-// // //           <div className="text-center p-10">
-// // //             <p className="text-lg text-gray-600">No bookings found</p>
-// // //           </div>
-// // //         ) : (
-// // //           <Table>
-// // //             <TableHeader>
-// // //               <TableRow>
-// // //                 <TableHead className="text-left">Name</TableHead>
-// // //                 <TableHead className="text-left">Phone</TableHead>
-// // //                 <TableHead className="text-left">Date</TableHead>
-// // //                 <TableHead className="text-left">Time</TableHead>
-// // //                 <TableHead className="text-right">Actions</TableHead>
-// // //               </TableRow>
-// // //             </TableHeader>
-// // //             <TableBody>
-// // //               {bookings.map((booking) => (
-// // //                 <TableRow key={booking._id}>
-// // //                   <TableCell className="text-left">{booking.name}</TableCell>
-// // //                   <TableCell className="text-left">{booking.phone}</TableCell>
-// // //                   <TableCell className="text-left">
-// // //                     {formatDate(booking.bookingDateTime)}
-// // //                   </TableCell>
-// // //                   <TableCell className="text-left">{booking.time}</TableCell>
-// // //                   <TableCell className="text-right">
-// // //                     <Button
-// // //                       variant="outline"
-// // //                       size="icon"
-// // //                       className="mr-2"
-// // //                       onClick={() => openViewModal(booking)}
-// // //                     >
-// // //                       <Eye className="h-4 w-4" />
-// // //                     </Button>
-// // //                     <Button
-// // //                       variant="outline"
-// // //                       size="icon"
-// // //                       className="mr-2"
-// // //                       onClick={() => openEditModal(booking)}
-// // //                     >
-// // //                       <Edit className="h-4 w-4" />
-// // //                     </Button>
-// // //                     <Button
-// // //                       variant="outline"
-// // //                       size="icon"
-// // //                       onClick={() => openDeleteModal(booking)}
-// // //                     >
-// // //                       <Trash className="h-4 w-4" />
-// // //                     </Button>
-// // //                   </TableCell>
-// // //                 </TableRow>
-// // //               ))}
-// // //             </TableBody>
-// // //           </Table>
-// // //         )}
-// // //       </CardContent>
-
-// // //       {/* Edit Booking Modal */}
-// // //       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-// // //         <DialogContent>
-// // //           <DialogHeader>
-// // //             <DialogTitle>Edit Booking</DialogTitle>
-// // //           </DialogHeader>
-// // //           <input
-// // //             type="text"
-// // //             className="border p-2 w-full"
-// // //             value={editedBooking.name || ""}
-// // //             onChange={(e) =>
-// // //               setEditedBooking({ ...editedBooking, name: e.target.value })
-// // //             }
-// // //           />
-// // //           <input
-// // //             type="text"
-// // //             className="border p-2 w-full"
-// // //             value={editedBooking.phone || ""}
-// // //             onChange={(e) =>
-// // //               setEditedBooking({ ...editedBooking, phone: e.target.value })
-// // //             }
-// // //           />
-// // //           <DialogFooter>
-// // //             <Button onClick={handleEdit}>Save</Button>
-// // //           </DialogFooter>
-// // //         </DialogContent>
-// // //       </Dialog>
-// // //     </Card>
-// // //   );
-// // // }
-// // import { useState, useEffect } from "react";
-// // import axios from "axios";
-// // import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// // import { Button } from "@/components/ui/button";
-// // import { Input } from "@/components/ui/input";
-// // import { Label } from "@/components/ui/label";
-// // import {
-// //   Table,
-// //   TableBody,
-// //   TableCell,
-// //   TableHead,
-// //   TableHeader,
-// //   TableRow,
-// // } from "@/components/ui/table";
-// // import {
-// //   Dialog,
-// //   DialogContent,
-// //   DialogDescription,
-// //   DialogFooter,
-// //   DialogHeader,
-// //   DialogTitle,
-// //   DialogClose,
-// // } from "@/components/ui/dialog";
-// // import { Alert, AlertDescription } from "@/components/ui/alert";
-// // import { Eye, Trash, Edit, RefreshCw } from "lucide-react";
-
-// // export default function BookingsManagement() {
-// //   const [bookings, setBookings] = useState([]);
-// //   const [loading, setLoading] = useState(true);
-// //   const [error, setError] = useState("");
-// //   const [success, setSuccess] = useState("");
-// //   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-// //   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-// //   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-// //   const [currentBooking, setCurrentBooking] = useState(null);
-// //   const [editedBooking, setEditedBooking] = useState({
-// //     name: "",
-// //     phone: "",
-// //     bookingDateTime: "",
-// //     time: "",
-// //   });
-
-// //   useEffect(() => {
-// //     fetchBookings();
-// //   }, []);
-
-// //   const fetchBookings = async () => {
-// //     try {
-// //       setLoading(true);
-// //       setError("");
-// //       const response = await axios.get("https://mahalaxmisite-backend.onrender.com/bookings");
-// //       setBookings(response.data);
-// //     } catch (error) {
-// //       console.error("Error fetching bookings:", error);
-// //       setError("Failed to load bookings. Please try again.");
-// //     } finally {
-// //       setLoading(false);
-// //     }
-// //   };
-
-// //   const handleDelete = async () => {
-// //     try {
-// //       setError("");
-// //       await axios.delete(
-// //         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`
-// //       );
-// //       setSuccess("Booking deleted successfully!");
-// //       fetchBookings();
-// //       setIsDeleteModalOpen(false);
-// //       setCurrentBooking(null);
-
-// //       // Clear success message after 3 seconds
-// //       setTimeout(() => setSuccess(""), 3000);
-// //     } catch (error) {
-// //       console.error("Error deleting booking:", error);
-// //       setError("Failed to delete booking. Please try again.");
-// //     }
-// //   };
-
-// //   const handleEdit = async () => {
-// //     try {
-// //       setError("");
-// //       await axios.put(
-// //         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`,
-// //         editedBooking
-// //       );
-// //       setSuccess("Booking updated successfully!");
-// //       fetchBookings();
-// //       setIsEditModalOpen(false);
-// //       setCurrentBooking(null);
-
-// //       // Clear success message after 3 seconds
-// //       setTimeout(() => setSuccess(""), 3000);
-// //     } catch (error) {
-// //       console.error("Error updating booking:", error);
-// //       setError("Failed to update booking. Please try again.");
-// //     }
-// //   };
-
-// //   const openViewModal = (booking) => {
-// //     setCurrentBooking(booking);
-// //     setIsViewModalOpen(true);
-// //   };
-
-// //   const openDeleteModal = (booking) => {
-// //     setCurrentBooking(booking);
-// //     setIsDeleteModalOpen(true);
-// //   };
-
-// //   const openEditModal = (booking) => {
-// //     setCurrentBooking(booking);
-// //     const bookingDate = new Date(booking.bookingDateTime);
-
-// //     // Format date for datetime-local input
-// //     const formattedDate = bookingDate.toISOString().slice(0, 16);
-
-// //     setEditedBooking({
-// //       ...booking,
-// //       bookingDateTime: formattedDate,
-// //     });
-// //     setIsEditModalOpen(true);
-// //   };
-
-// //   const formatDate = (dateString) => {
-// //     const date = new Date(dateString);
-// //     return date.toLocaleDateString() + " " + date.toLocaleTimeString();
-// //   };
-
-// //   return (
-// //     <Card className="w-full">
-// //       <CardHeader className="flex flex-row items-center justify-between">
-// //         <CardTitle>Bookings Management</CardTitle>
-// //         <Button
-// //           onClick={fetchBookings}
-// //           variant="outline"
-// //           className="flex items-center gap-2"
-// //         >
-// //           <RefreshCw className="h-4 w-4" />
-// //           Refresh
-// //         </Button>
-// //       </CardHeader>
-// //       <CardContent>
-// //         {error && (
-// //           <Alert variant="destructive" className="mb-4">
-// //             <AlertDescription>{error}</AlertDescription>
-// //           </Alert>
-// //         )}
-
-// //         {success && (
-// //           <Alert
-// //             variant="default"
-// //             className="mb-4 bg-green-50 text-green-800 border-green-200"
-// //           >
-// //             <AlertDescription>{success}</AlertDescription>
-// //           </Alert>
-// //         )}
-
-// //         {loading ? (
-// //           <div className="text-center p-6">Loading bookings...</div>
-// //         ) : bookings.length === 0 ? (
-// //           <div className="text-center p-10">
-// //             <p className="text-lg text-gray-600">No bookings found</p>
-// //           </div>
-// //         ) : (
-// //           <div className="overflow-x-auto">
-// //             <Table>
-// //               <TableHeader>
-// //                 <TableRow>
-// //                   <TableHead className="w-[200px]">Name</TableHead>
-// //                   <TableHead className="w-[150px]">Phone</TableHead>
-// //                   <TableHead className="w-[200px]">Date & Time</TableHead>
-// //                   <TableHead className="w-[100px] text-right">
-// //                     Actions
-// //                   </TableHead>
-// //                 </TableRow>
-// //               </TableHeader>
-// //               <TableBody>
-// //                 {bookings.map((booking) => (
-// //                   <TableRow key={booking._id}>
-// //                     <TableCell className="font-medium">
-// //                       {booking.name}
-// //                     </TableCell>
-// //                     <TableCell>{booking.phone}</TableCell>
-// //                     <TableCell>{formatDate(booking.bookingDateTime)}</TableCell>
-// //                     <TableCell className="text-right">
-// //                       <div className="flex justify-end gap-2">
-// //                         <Button
-// //                           variant="outline"
-// //                           size="icon"
-// //                           onClick={() => openViewModal(booking)}
-// //                           title="View Details"
-// //                         >
-// //                           <Eye className="h-4 w-4" />
-// //                         </Button>
-// //                         <Button
-// //                           variant="outline"
-// //                           size="icon"
-// //                           onClick={() => openEditModal(booking)}
-// //                           title="Edit Booking"
-// //                         >
-// //                           <Edit className="h-4 w-4" />
-// //                         </Button>
-// //                         <Button
-// //                           variant="outline"
-// //                           size="icon"
-// //                           onClick={() => openDeleteModal(booking)}
-// //                           title="Delete Booking"
-// //                           className="text-red-500 hover:bg-red-50"
-// //                         >
-// //                           <Trash className="h-4 w-4" />
-// //                         </Button>
-// //                       </div>
-// //                     </TableCell>
-// //                   </TableRow>
-// //                 ))}
-// //               </TableBody>
-// //             </Table>
-// //           </div>
-// //         )}
-// //       </CardContent>
-
-// //       {/* View Booking Modal */}
-// //       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-// //         <DialogContent className="max-w-md">
-// //           <DialogHeader>
-// //             <DialogTitle>Booking Details</DialogTitle>
-// //           </DialogHeader>
-// //           {currentBooking && (
-// //             <div className="space-y-4">
-// //               <div className="grid grid-cols-3 gap-2">
-// //                 <div className="font-semibold">Name:</div>
-// //                 <div className="col-span-2">{currentBooking.name}</div>
-// //               </div>
-// //               <div className="grid grid-cols-3 gap-2">
-// //                 <div className="font-semibold">Phone:</div>
-// //                 <div className="col-span-2">{currentBooking.phone}</div>
-// //               </div>
-// //               <div className="grid grid-cols-3 gap-2">
-// //                 <div className="font-semibold">Date & Time:</div>
-// //                 <div className="col-span-2">
-// //                   {formatDate(currentBooking.bookingDateTime)}
-// //                 </div>
-// //               </div>
-// //               {currentBooking.transactionId && (
-// //                 <div className="grid grid-cols-3 gap-2">
-// //                   <div className="font-semibold">Transaction ID:</div>
-// //                   <div className="col-span-2">
-// //                     {currentBooking.transactionId}
-// //                   </div>
-// //                 </div>
-// //               )}
-// //             </div>
-// //           )}
-// //           <DialogFooter>
-// //             <DialogClose asChild>
-// //               <Button variant="outline">Close</Button>
-// //             </DialogClose>
-// //           </DialogFooter>
-// //         </DialogContent>
-// //       </Dialog>
-
-// //       {/* Edit Booking Modal */}
-// //       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-// //         <DialogContent className="max-w-md">
-// //           <DialogHeader>
-// //             <DialogTitle>Edit Booking</DialogTitle>
-// //             <DialogDescription>
-// //               Make changes to the booking information below.
-// //             </DialogDescription>
-// //           </DialogHeader>
-// //           <div className="grid gap-4 py-4">
-// //             <div className="grid gap-2">
-// //               <Label htmlFor="name">Name</Label>
-// //               <Input
-// //                 id="name"
-// //                 value={editedBooking.name || ""}
-// //                 onChange={(e) =>
-// //                   setEditedBooking({ ...editedBooking, name: e.target.value })
-// //                 }
-// //               />
-// //             </div>
-// //             <div className="grid gap-2">
-// //               <Label htmlFor="phone">Phone</Label>
-// //               <Input
-// //                 id="phone"
-// //                 value={editedBooking.phone || ""}
-// //                 onChange={(e) =>
-// //                   setEditedBooking({ ...editedBooking, phone: e.target.value })
-// //                 }
-// //               />
-// //             </div>
-// //             <div className="grid gap-2">
-// //               <Label htmlFor="bookingDateTime">Date & Time</Label>
-// //               <Input
-// //                 id="bookingDateTime"
-// //                 type="datetime-local"
-// //                 value={editedBooking.bookingDateTime || ""}
-// //                 onChange={(e) =>
-// //                   setEditedBooking({
-// //                     ...editedBooking,
-// //                     bookingDateTime: e.target.value,
-// //                   })
-// //                 }
-// //               />
-// //             </div>
-// //           </div>
-// //           <DialogFooter>
-// //             <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
-// //               Cancel
-// //             </Button>
-// //             <Button onClick={handleEdit}>Save Changes</Button>
-// //           </DialogFooter>
-// //         </DialogContent>
-// //       </Dialog>
-
-// //       {/* Delete Confirmation Modal */}
-// //       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-// //         <DialogContent className="max-w-md">
-// //           <DialogHeader>
-// //             <DialogTitle>Confirm Deletion</DialogTitle>
-// //             <DialogDescription>
-// //               Are you sure you want to delete this booking? This action cannot
-// //               be undone.
-// //             </DialogDescription>
-// //           </DialogHeader>
-// //           {currentBooking && (
-// //             <div className="py-3 border-t border-b my-4">
-// //               <p>
-// //                 <span className="font-medium">Name:</span> {currentBooking.name}
-// //               </p>
-// //               <p>
-// //                 <span className="font-medium">Phone:</span>{" "}
-// //                 {currentBooking.phone}
-// //               </p>
-// //               <p>
-// //                 <span className="font-medium">Date:</span>{" "}
-// //                 {formatDate(currentBooking.bookingDateTime)}
-// //               </p>
-// //             </div>
-// //           )}
-// //           <DialogFooter>
-// //             <Button
-// //               variant="outline"
-// //               onClick={() => setIsDeleteModalOpen(false)}
-// //             >
-// //               Cancel
-// //             </Button>
-// //             <Button variant="destructive" onClick={handleDelete}>
-// //               Delete
-// //             </Button>
-// //           </DialogFooter>
-// //         </DialogContent>
-// //       </Dialog>
-// //     </Card>
-// //   );
-// // }
-
-// import { useState, useEffect } from "react";
-// import axios from "axios";
-// import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Label } from "@/components/ui/label";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogFooter,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogClose,
-// } from "@/components/ui/dialog";
-// import { Alert, AlertDescription } from "@/components/ui/alert";
-// import { Eye, Trash, Edit, RefreshCw } from "lucide-react";
-
-// export default function BookingsManagement() {
-//   const [bookings, setBookings] = useState([]);
-//   const [loading, setLoading] = useState(true);
-//   const [error, setError] = useState("");
-//   const [success, setSuccess] = useState("");
-//   const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-//   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-//   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-//   const [currentBooking, setCurrentBooking] = useState(null);
-//   const [editedBooking, setEditedBooking] = useState({
-//     name: "",
-//     phone: "",
-//     bookingDate: "",
-//     time: "",
-//   });
-
-//   // Available time slots
-//   const timeOptions = ["5 AM", "7 AM", "10 AM"];
-
-//   useEffect(() => {
-//     fetchBookings();
-//   }, []);
-
-//   const fetchBookings = async () => {
-//     try {
-//       setLoading(true);
-//       setError("");
-//       const response = await axios.get("https://mahalaxmisite-backend.onrender.com/bookings");
-//       setBookings(response.data);
-//     } catch (error) {
-//       console.error("Error fetching bookings:", error);
-//       setError("Failed to load bookings. Please try again.");
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleDelete = async () => {
-//     try {
-//       setError("");
-//       await axios.delete(
-//         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`
-//       );
-//       setSuccess("Booking deleted successfully!");
-//       fetchBookings();
-//       setIsDeleteModalOpen(false);
-//       setCurrentBooking(null);
-
-//       // Clear success message after 3 seconds
-//       setTimeout(() => setSuccess(""), 3000);
-//     } catch (error) {
-//       console.error("Error deleting booking:", error);
-//       setError("Failed to delete booking. Please try again.");
-//     }
-//   };
-
-//   const handleEdit = async () => {
-//     try {
-//       setError("");
-
-//       // Create a new Date object from the selected date
-//       const bookingDate = new Date(editedBooking.bookingDate);
-
-//       // Extract the time from the selected time slot
-//       const timeStr = editedBooking.time;
-//       const hour = timeStr === "5 AM" ? 5 : timeStr === "7 AM" ? 7 : 10;
-
-//       // Set the hours on the booking date
-//       bookingDate.setHours(hour, 0, 0, 0);
-
-//       // Create the payload with the combined date and time
-//       const payload = {
-//         ...editedBooking,
-//         bookingDateTime: bookingDate.toISOString(),
-//         time: timeStr,
-//       };
-
-//       await axios.put(
-//         `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`,
-//         payload
-//       );
-
-//       setSuccess("Booking updated successfully!");
-//       fetchBookings();
-//       setIsEditModalOpen(false);
-//       setCurrentBooking(null);
-
-//       // Clear success message after 3 seconds
-//       setTimeout(() => setSuccess(""), 3000);
-//     } catch (error) {
-//       console.error("Error updating booking:", error);
-//       setError("Failed to update booking. Please try again.");
-//     }
-//   };
-
-//   const openViewModal = (booking) => {
-//     setCurrentBooking(booking);
-//     setIsViewModalOpen(true);
-//   };
-
-//   const openDeleteModal = (booking) => {
-//     setCurrentBooking(booking);
-//     setIsDeleteModalOpen(true);
-//   };
-
-//   const openEditModal = (booking) => {
-//     setCurrentBooking(booking);
-
-//     // Extract date and time from booking
-//     const bookingDate = new Date(booking.bookingDateTime);
-//     const year = bookingDate.getFullYear();
-//     const month = String(bookingDate.getMonth() + 1).padStart(2, "0");
-//     const day = String(bookingDate.getDate()).padStart(2, "0");
-//     const formattedDate = `${year}-${month}-${day}`;
-
-//     let timeSlot = "5 AM";
-//     const hours = bookingDate.getHours();
-//     if (hours === 7) timeSlot = "7 AM";
-//     else if (hours === 10) timeSlot = "10 AM";
-
-//     setEditedBooking({
-//       ...booking,
-//       bookingDate: formattedDate,
-//       time: booking.time || timeSlot,
-//     });
-
-//     setIsEditModalOpen(true);
-//   };
-
-//   const formatDate = (dateString) => {
-//     const date = new Date(dateString);
-//     return date.toLocaleDateString();
-//   };
-
-//   const formatTime = (dateString) => {
-//     const date = new Date(dateString);
-//     const hours = date.getHours();
-
-//     if (hours === 5) return "5 AM";
-//     if (hours === 7) return "7 AM";
-//     if (hours === 10) return "10 AM";
-
-//     // If time doesn't match our predefined slots, return the regular time
-//     return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-//   };
-
-//   return (
-//     <Card className="w-full">
-//       <CardHeader className="flex flex-row items-center justify-between">
-//         <CardTitle>Bookings Management</CardTitle>
-//         <Button
-//           onClick={fetchBookings}
-//           variant="outline"
-//           className="flex items-center gap-2"
-//         >
-//           <RefreshCw className="h-4 w-4" />
-//           Refresh
-//         </Button>
-//       </CardHeader>
-//       <CardContent>
-//         {error && (
-//           <Alert variant="destructive" className="mb-4">
-//             <AlertDescription>{error}</AlertDescription>
-//           </Alert>
-//         )}
-
-//         {success && (
-//           <Alert
-//             variant="default"
-//             className="mb-4 bg-green-50 text-green-800 border-green-200"
-//           >
-//             <AlertDescription>{success}</AlertDescription>
-//           </Alert>
-//         )}
-
-//         {loading ? (
-//           <div className="text-center p-6">Loading bookings...</div>
-//         ) : bookings.length === 0 ? (
-//           <div className="text-center p-10">
-//             <p className="text-lg text-gray-600">No bookings found</p>
-//           </div>
-//         ) : (
-//           <div className="overflow-x-auto">
-//             <Table>
-//               <TableHeader>
-//                 <TableRow>
-//                   <TableHead className="w-[200px]">Name</TableHead>
-//                   <TableHead className="w-[150px]">Phone</TableHead>
-//                   <TableHead className="w-[120px]">Date</TableHead>
-//                   <TableHead className="w-[80px]">Time</TableHead>
-//                   <TableHead className="w-[100px] text-right">
-//                     Actions
-//                   </TableHead>
-//                 </TableRow>
-//               </TableHeader>
-//               <TableBody>
-//                 {bookings.map((booking) => (
-//                   <TableRow key={booking._id}>
-//                     <TableCell className="font-medium">
-//                       {booking.name}
-//                     </TableCell>
-//                     <TableCell>{booking.phone}</TableCell>
-//                     <TableCell>{formatDate(booking.bookingDateTime)}</TableCell>
-//                     <TableCell>
-//                       {booking.time || formatTime(booking.bookingDateTime)}
-//                     </TableCell>
-//                     <TableCell className="text-right">
-//                       <div className="flex justify-end gap-2">
-//                         <Button
-//                           variant="outline"
-//                           size="icon"
-//                           onClick={() => openViewModal(booking)}
-//                           title="View Details"
-//                         >
-//                           <Eye className="h-4 w-4" />
-//                         </Button>
-//                         <Button
-//                           variant="outline"
-//                           size="icon"
-//                           onClick={() => openEditModal(booking)}
-//                           title="Edit Booking"
-//                         >
-//                           <Edit className="h-4 w-4" />
-//                         </Button>
-//                         <Button
-//                           variant="outline"
-//                           size="icon"
-//                           onClick={() => openDeleteModal(booking)}
-//                           title="Delete Booking"
-//                           className="text-red-500 hover:bg-red-50"
-//                         >
-//                           <Trash className="h-4 w-4" />
-//                         </Button>
-//                       </div>
-//                     </TableCell>
-//                   </TableRow>
-//                 ))}
-//               </TableBody>
-//             </Table>
-//           </div>
-//         )}
-//       </CardContent>
-
-//       {/* View Booking Modal */}
-//       <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-//         <DialogContent className="max-w-md">
-//           <DialogHeader>
-//             <DialogTitle>Booking Details</DialogTitle>
-//           </DialogHeader>
-//           {currentBooking && (
-//             <div className="space-y-4">
-//               <div className="grid grid-cols-3 gap-2">
-//                 <div className="font-semibold">Name:</div>
-//                 <div className="col-span-2">{currentBooking.name}</div>
-//               </div>
-//               <div className="grid grid-cols-3 gap-2">
-//                 <div className="font-semibold">Phone:</div>
-//                 <div className="col-span-2">{currentBooking.phone}</div>
-//               </div>
-//               <div className="grid grid-cols-3 gap-2">
-//                 <div className="font-semibold">Date:</div>
-//                 <div className="col-span-2">
-//                   {formatDate(currentBooking.bookingDateTime)}
-//                 </div>
-//               </div>
-//               <div className="grid grid-cols-3 gap-2">
-//                 <div className="font-semibold">Time:</div>
-//                 <div className="col-span-2">
-//                   {currentBooking.time ||
-//                     formatTime(currentBooking.bookingDateTime)}
-//                 </div>
-//               </div>
-//               {currentBooking.transactionId && (
-//                 <div className="grid grid-cols-3 gap-2">
-//                   <div className="font-semibold">Transaction ID:</div>
-//                   <div className="col-span-2">
-//                     {currentBooking.transactionId}
-//                   </div>
-//                 </div>
-//               )}
-//             </div>
-//           )}
-//           <DialogFooter>
-//             <DialogClose asChild>
-//               <Button variant="outline">Close</Button>
-//             </DialogClose>
-//           </DialogFooter>
-//         </DialogContent>
-//       </Dialog>
-
-//       {/* Edit Booking Modal */}
-//       <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-//         <DialogContent className="max-w-md">
-//           <DialogHeader>
-//             <DialogTitle>Edit Booking</DialogTitle>
-//             <DialogDescription>
-//               Make changes to the booking information below.
-//             </DialogDescription>
-//           </DialogHeader>
-//           <div className="grid gap-4 py-4">
-//             <div className="grid gap-2">
-//               <Label htmlFor="name">Name</Label>
-//               <Input
-//                 id="name"
-//                 value={editedBooking.name || ""}
-//                 onChange={(e) =>
-//                   setEditedBooking({ ...editedBooking, name: e.target.value })
-//                 }
-//               />
-//             </div>
-//             <div className="grid gap-2">
-//               <Label htmlFor="phone">Phone</Label>
-//               <Input
-//                 id="phone"
-//                 value={editedBooking.phone || ""}
-//                 onChange={(e) =>
-//                   setEditedBooking({ ...editedBooking, phone: e.target.value })
-//                 }
-//               />
-//             </div>
-//             <div className="grid gap-2">
-//               <Label htmlFor="bookingDate">Date</Label>
-//               <Input
-//                 id="bookingDate"
-//                 type="date"
-//                 value={editedBooking.bookingDate || ""}
-//                 onChange={(e) =>
-//                   setEditedBooking({
-//                     ...editedBooking,
-//                     bookingDate: e.target.value,
-//                   })
-//                 }
-//               />
-//             </div>
-//             <div className="grid gap-2">
-//               <Label htmlFor="time">Time</Label>
-//               <Select
-//                 value={editedBooking.time || "5 AM"}
-//                 onValueChange={(value) =>
-//                   setEditedBooking({ ...editedBooking, time: value })
-//                 }
-//               >
-//                 <SelectTrigger id="time">
-//                   <SelectValue placeholder="Select time" />
-//                 </SelectTrigger>
-//                 <SelectContent>
-//                   {timeOptions.map((time) => (
-//                     <SelectItem key={time} value={time}>
-//                       {time}
-//                     </SelectItem>
-//                   ))}
-//                 </SelectContent>
-//               </Select>
-//             </div>
-//           </div>
-//           <DialogFooter>
-//             <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
-//               Cancel
-//             </Button>
-//             <Button onClick={handleEdit}>Save Changes</Button>
-//           </DialogFooter>
-//         </DialogContent>
-//       </Dialog>
-
-//       {/* Delete Confirmation Modal */}
-//       <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-//         <DialogContent className="max-w-md">
-//           <DialogHeader>
-//             <DialogTitle>Confirm Deletion</DialogTitle>
-//             <DialogDescription>
-//               Are you sure you want to delete this booking? This action cannot
-//               be undone.
-//             </DialogDescription>
-//           </DialogHeader>
-//           {currentBooking && (
-//             <div className="py-3 border-t border-b my-4">
-//               <p>
-//                 <span className="font-medium">Name:</span> {currentBooking.name}
-//               </p>
-//               <p>
-//                 <span className="font-medium">Phone:</span>{" "}
-//                 {currentBooking.phone}
-//               </p>
-//               <p>
-//                 <span className="font-medium">Date:</span>{" "}
-//                 {formatDate(currentBooking.bookingDateTime)}
-//               </p>
-//               <p>
-//                 <span className="font-medium">Time:</span>{" "}
-//                 {currentBooking.time ||
-//                   formatTime(currentBooking.bookingDateTime)}
-//               </p>
-//             </div>
-//           )}
-//           <DialogFooter>
-//             <Button
-//               variant="outline"
-//               onClick={() => setIsDeleteModalOpen(false)}
-//             >
-//               Cancel
-//             </Button>
-//             <Button variant="destructive" onClick={handleDelete}>
-//               Delete
-//             </Button>
-//           </DialogFooter>
-//         </DialogContent>
-//       </Dialog>
-//     </Card>
-//   );
-// }
-
-import { useState, useEffect } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -1202,6 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Switch } from "@/components/ui/switch";
 import {
   Table,
   TableBody,
@@ -1217,167 +27,159 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-  DialogClose,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Eye, Trash, Edit, RefreshCw, Download, CalendarX } from "lucide-react";
+import {
+  CheckCircle2,
+  Copy,
+  Download,
+  Eye,
+  Edit,
+  RefreshCw,
+  Search,
+  Trash2,
+  CalendarX,
+  Check,
+  X,
+  Loader2,
+} from "lucide-react";
+
+const API_URL = "https://mahalaxmisite-backend.onrender.com";
+const TIME_OPTIONS = ["5 AM", "7 AM", "9:30 AM"];
+
+function getBookingTimestamp(booking) {
+  const value = booking?.formFilingDateTime;
+  if (typeof value === "number" && Number.isFinite(value)) return value;
+  if (value) {
+    const parsed = new Date(value).getTime();
+    if (Number.isFinite(parsed)) return parsed;
+  }
+  // Older records may not have a creation timestamp. Fall back to their ID or booking date.
+  const idTimestamp =
+    booking?._id && /^[0-9a-f]{24}$/i.test(booking._id)
+      ? parseInt(booking._id.slice(0, 8), 16) * 1000
+      : NaN;
+  if (Number.isFinite(idTimestamp)) return idTimestamp;
+  return new Date(booking?.bookingDateTime || 0).getTime();
+}
+
+function localDateInputValue(dateValue) {
+  const date = new Date(dateValue);
+  if (Number.isNaN(date.getTime())) return "";
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function escapeCsv(value) {
+  const text = String(value ?? "");
+  return `"${text.replace(/"/g, '""')}"`;
+}
 
 export default function BookingsManagement() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isDeletePastModalOpen, setIsDeletePastModalOpen] = useState(false);
-  const [currentBooking, setCurrentBooking] = useState(null);
+  const [search, setSearch] = useState("");
+  const [sortBy, setSortBy] = useState("newest");
   const [activeTab, setActiveTab] = useState("upcoming");
+  const [isViewModalOpen, setIsViewModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeletePastModalOpen, setIsDeletePastModalOpen] = useState(false);
+  const [isDeleteAllModalOpen, setIsDeleteAllModalOpen] = useState(false);
+  const [currentBooking, setCurrentBooking] = useState(null);
+  const [savingId, setSavingId] = useState("");
+  const [deleting, setDeleting] = useState(false);
   const [editedBooking, setEditedBooking] = useState({
     name: "",
     phone: "",
     bookingDate: "",
     time: "",
+    transactionId: "",
+    isCompleted: false,
   });
 
-  // Available time slots
-  const timeOptions = ["5 AM", "7 AM", "10 AM"];
+  const clearMessages = () => {
+    setError("");
+    setSuccess("");
+  };
+
+  const showSuccess = (message) => {
+    setError("");
+    setSuccess(message);
+    window.setTimeout(
+      () => setSuccess((current) => (current === message ? "" : current)),
+      3500,
+    );
+  };
+
+  const fetchBookings = useCallback(async (showLoader = true) => {
+    try {
+      if (showLoader) setLoading(true);
+      setError("");
+      const response = await axios.get(`${API_URL}/bookings`, {
+        timeout: 180000,
+      });
+      const records = Array.isArray(response.data) ? response.data : [];
+      setBookings(
+        records.sort((a, b) => getBookingTimestamp(b) - getBookingTimestamp(a)),
+      );
+    } catch (err) {
+      console.error("Error fetching bookings:", err);
+      setError(
+        err.response?.data?.error ||
+          "Failed to load bookings. Please try again.",
+      );
+    } finally {
+      if (showLoader) setLoading(false);
+    }
+  }, []);
 
   useEffect(() => {
     fetchBookings();
-  }, []);
+  }, [fetchBookings]);
 
-  const fetchBookings = async () => {
-    try {
-      setLoading(true);
-      setError("");
-      const response = await axios.get(
-        "https://mahalaxmisite-backend.onrender.com/bookings"
-      );
-      setBookings(response.data);
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
-      setError("Failed to load bookings. Please try again.");
-    } finally {
-      setLoading(false);
-    }
+  const todayStart = useMemo(() => {
+    const date = new Date();
+    date.setHours(0, 0, 0, 0);
+    return date.getTime();
+  }, [bookings.length]);
+
+  const formatDate = (dateValue) => {
+    if (!dateValue) return "—";
+    const date = new Date(dateValue);
+    return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString();
   };
 
-  const handleDelete = async () => {
-    try {
-      setError("");
-      await axios.delete(
-        `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`
-      );
-      setSuccess("Booking deleted successfully!");
-      fetchBookings();
-      setIsDeleteModalOpen(false);
-      setCurrentBooking(null);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (error) {
-      console.error("Error deleting booking:", error);
-      setError("Failed to delete booking. Please try again.");
-    }
+  const formatTime = (dateValue) => {
+    if (!dateValue) return "—";
+    const date = new Date(dateValue);
+    if (Number.isNaN(date.getTime())) return "—";
+    const hours = date.getHours();
+    const minutes = date.getMinutes();
+    if (hours === 5 && minutes === 0) return "5 AM";
+    if (hours === 7 && minutes === 0) return "7 AM";
+    if (hours === 9 && minutes === 30) return "9:30 AM";
+    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  const handleDeletePastBookings = async () => {
-    try {
-      setError("");
-      const today = new Date();
-      today.setHours(0, 0, 0, 0);
-
-      // Send request to delete past bookings
-      await axios.delete(
-        `https://mahalaxmisite-backend.onrender.com/bookings/delete-past/${today.toISOString()}`
-      );
-
-      setSuccess("Past bookings deleted successfully!");
-      fetchBookings();
-      setIsDeletePastModalOpen(false);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (error) {
-      console.error("Error deleting past bookings:", error);
-      setError("Failed to delete past bookings. Please try again.");
+  const copyText = async (value, label) => {
+    if (!value) {
+      setError(`${label} is not available to copy.`);
+      return;
     }
-  };
-
-  const handleEdit = async () => {
     try {
-      setError("");
-
-      // Create a new Date object from the selected date
-      const bookingDate = new Date(editedBooking.bookingDate);
-
-      // Extract the time from the selected time slot
-      const timeStr = editedBooking.time;
-      const hour = timeStr === "5 AM" ? 5 : timeStr === "7 AM" ? 7 : 10;
-
-      // Set the hours on the booking date
-      bookingDate.setHours(hour, 0, 0, 0);
-
-      // Create the payload with the combined date and time
-      const payload = {
-        ...editedBooking,
-        bookingDateTime: bookingDate.toISOString(),
-        time: timeStr,
-      };
-
-      await axios.put(
-        `https://mahalaxmisite-backend.onrender.com/bookings/${currentBooking._id}`,
-        payload
+      await navigator.clipboard.writeText(String(value));
+      showSuccess(`${label} copied to clipboard.`);
+    } catch (err) {
+      console.error("Clipboard copy failed:", err);
+      setError(
+        "Could not copy automatically. Please select and copy the text manually.",
       );
-
-      setSuccess("Booking updated successfully!");
-      fetchBookings();
-      setIsEditModalOpen(false);
-      setCurrentBooking(null);
-
-      // Clear success message after 3 seconds
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (error) {
-      console.error("Error updating booking:", error);
-      setError("Failed to update booking. Please try again.");
-    }
-  };
-
-  const downloadBookingsData = () => {
-    try {
-      // Format data for Excel
-      const now = new Date();
-      const dateStr = now.toISOString().split("T")[0];
-
-      // Create header row
-      let csvContent = "Name,Phone,Date,Time,Transaction ID\n";
-
-      // Add data rows
-      bookings.forEach((booking) => {
-        const date = formatDate(booking.bookingDateTime);
-        const time = booking.time || formatTime(booking.bookingDateTime);
-        const transactionId = booking.transactionId || "";
-
-        csvContent += `${booking.name},${booking.phone},${date},${time},${transactionId}\n`;
-      });
-
-      // Create a Blob and download link
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.setAttribute("href", url);
-      link.setAttribute("download", `bookings-${dateStr}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-
-      setSuccess("Bookings data downloaded successfully!");
-      setTimeout(() => setSuccess(""), 3000);
-    } catch (error) {
-      console.error("Error downloading bookings data:", error);
-      setError("Failed to download bookings data. Please try again.");
     }
   };
 
@@ -1393,130 +195,444 @@ export default function BookingsManagement() {
 
   const openEditModal = (booking) => {
     setCurrentBooking(booking);
-
-    // Extract date and time from booking
-    const bookingDate = new Date(booking.bookingDateTime);
-    const year = bookingDate.getFullYear();
-    const month = String(bookingDate.getMonth() + 1).padStart(2, "0");
-    const day = String(bookingDate.getDate()).padStart(2, "0");
-    const formattedDate = `${year}-${month}-${day}`;
-
-    let timeSlot = "5 AM";
-    const hours = bookingDate.getHours();
-    if (hours === 7) timeSlot = "7 AM";
-    else if (hours === 10) timeSlot = "10 AM";
-
+    const date = new Date(booking.bookingDateTime);
+    const hour = date.getHours();
+    const minutes = date.getMinutes();
+    let time = formatTime(booking.bookingDateTime);
+    if (!TIME_OPTIONS.includes(time)) {
+      if (hour === 5) time = "5 AM";
+      else if (hour === 7) time = "7 AM";
+      else if (hour === 9 && minutes >= 15 && minutes <= 45) time = "9:30 AM";
+      else time = "5 AM";
+    }
     setEditedBooking({
-      ...booking,
-      bookingDate: formattedDate,
-      time: booking.time || timeSlot,
+      name: booking.name || "",
+      phone: booking.phone || "",
+      bookingDate: localDateInputValue(booking.bookingDateTime),
+      time:
+        booking.time && TIME_OPTIONS.includes(booking.time)
+          ? booking.time
+          : time,
+      transactionId: booking.transactionId || "",
+      isCompleted: Boolean(booking.isCompleted),
     });
-
     setIsEditModalOpen(true);
   };
 
-  const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString();
+  const handleEdit = async () => {
+    if (!currentBooking?._id) return;
+    try {
+      clearMessages();
+      const [hour, minute] =
+        editedBooking.time === "5 AM"
+          ? [5, 0]
+          : editedBooking.time === "7 AM"
+            ? [7, 0]
+            : [9, 30];
+      const [year, month, day] = editedBooking.bookingDate
+        .split("-")
+        .map(Number);
+      const bookingDateTime = new Date(
+        year,
+        month - 1,
+        day,
+        hour,
+        minute,
+        0,
+        0,
+      );
+      if (
+        !editedBooking.bookingDate ||
+        Number.isNaN(bookingDateTime.getTime())
+      ) {
+        setError("Please select a valid booking date and time.");
+        return;
+      }
+      const payload = {
+        name: editedBooking.name.trim(),
+        phone: editedBooking.phone.trim(),
+        transactionId: editedBooking.transactionId.trim(),
+        bookingDateTime: bookingDateTime.toISOString(),
+        time: editedBooking.time,
+        isCompleted: Boolean(editedBooking.isCompleted),
+      };
+      setSavingId(currentBooking._id);
+      await axios.put(`${API_URL}/bookings/${currentBooking._id}`, payload, {
+        timeout: 180000,
+      });
+      setBookings((previous) =>
+        previous.map((booking) =>
+          booking._id === currentBooking._id
+            ? { ...booking, ...payload }
+            : booking,
+        ),
+      );
+      setIsEditModalOpen(false);
+      setCurrentBooking(null);
+      showSuccess("Booking updated successfully.");
+      await fetchBookings(false);
+    } catch (err) {
+      console.error("Error updating booking:", err);
+      setError(
+        err.response?.data?.error ||
+          "Failed to update booking. Please try again.",
+      );
+    } finally {
+      setSavingId("");
+    }
   };
 
-  const formatTime = (dateString) => {
-    const date = new Date(dateString);
-    const hours = date.getHours();
-
-    if (hours === 5) return "5 AM";
-    if (hours === 7) return "7 AM";
-    if (hours === 10) return "10 AM";
-
-    // If time doesn't match our predefined slots, return the regular time
-    return date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  const handleCompletionChange = async (booking, isCompleted) => {
+    if (!booking?._id || savingId) return;
+    setSavingId(booking._id);
+    clearMessages();
+    // Optimistic UI update; revert if the API fails.
+    setBookings((previous) =>
+      previous.map((item) =>
+        item._id === booking._id ? { ...item, isCompleted } : item,
+      ),
+    );
+    try {
+      await axios.put(
+        `${API_URL}/bookings/${booking._id}`,
+        { isCompleted },
+        { timeout: 180000 },
+      );
+      setCurrentBooking((previous) =>
+        previous?._id === booking._id ? { ...previous, isCompleted } : previous,
+      );
+      showSuccess(
+        isCompleted
+          ? "Booking marked as completed and updated."
+          : "Booking marked as pending and updated.",
+      );
+    } catch (err) {
+      setBookings((previous) =>
+        previous.map((item) =>
+          item._id === booking._id
+            ? { ...item, isCompleted: Boolean(booking.isCompleted) }
+            : item,
+        ),
+      );
+      console.error("Error updating completion status:", err);
+      setError(
+        err.response?.data?.error ||
+          "Could not update completion status. Please try again.",
+      );
+    } finally {
+      setSavingId("");
+    }
   };
 
-  // Function to sort bookings by date and time
-  const sortBookings = (bookingsToSort) => {
-    return [...bookingsToSort].sort((a, b) => {
-      const dateA = new Date(a.bookingDateTime);
-      const dateB = new Date(b.bookingDateTime);
-      return dateA - dateB; // Ascending by date and time
-    });
+  const handleDelete = async () => {
+    if (!currentBooking?._id) return;
+    try {
+      setDeleting(true);
+      clearMessages();
+      await axios.delete(`${API_URL}/bookings/${currentBooking._id}`, {
+        timeout: 180000,
+      });
+      setBookings((previous) =>
+        previous.filter((booking) => booking._id !== currentBooking._id),
+      );
+      setIsDeleteModalOpen(false);
+      setCurrentBooking(null);
+      showSuccess("Booking deleted successfully.");
+    } catch (err) {
+      console.error("Error deleting booking:", err);
+      setError(
+        err.response?.data?.error ||
+          "Failed to delete booking. Please try again.",
+      );
+    } finally {
+      setDeleting(false);
+    }
   };
 
-  // Separate bookings into past and upcoming
-  const today = new Date();
-  today.setHours(0, 0, 0, 0); // Start of today
+  const handleDeletePastBookings = async () => {
+    try {
+      setDeleting(true);
+      clearMessages();
+      const cutoff = new Date();
+      cutoff.setHours(0, 0, 0, 0);
+      await axios.delete(
+        `${API_URL}/bookings/delete-past/${encodeURIComponent(cutoff.toISOString())}`,
+        { timeout: 180000 },
+      );
+      setIsDeletePastModalOpen(false);
+      showSuccess("Past bookings deleted successfully.");
+      await fetchBookings(false);
+    } catch (err) {
+      console.error("Error deleting past bookings:", err);
+      setError(
+        err.response?.data?.error ||
+          "Failed to delete past bookings. Check that the backend delete-past route is configured.",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
-  const pastBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.bookingDateTime);
-    return bookingDate < today;
-  });
+  const handleDeleteAllBookings = async () => {
+    try {
+      setDeleting(true);
+      clearMessages();
+      await axios.delete(`${API_URL}/bookings`, { timeout: 180000 });
+      setBookings([]);
+      setIsDeleteAllModalOpen(false);
+      showSuccess("All bookings deleted successfully.");
+    } catch (err) {
+      console.error("Error deleting all bookings:", err);
+      setError(
+        err.response?.data?.error ||
+          "Failed to delete all bookings. Check that the backend DELETE /bookings route is configured.",
+      );
+    } finally {
+      setDeleting(false);
+    }
+  };
 
-  const upcomingBookings = bookings.filter((booking) => {
-    const bookingDate = new Date(booking.bookingDateTime);
-    return bookingDate >= today;
-  });
+  const downloadBookingsData = () => {
+    try {
+      const dateString = new Date().toISOString().slice(0, 10);
+      const rows = [
+        [
+          "Name",
+          "Phone",
+          "Date",
+          "Time",
+          "Transaction ID",
+          "Completed",
+          "Form Submitted At",
+        ],
+        ...filteredAndSortedBookings.map((booking) => [
+          booking.name,
+          booking.phone,
+          formatDate(booking.bookingDateTime),
+          booking.time || formatTime(booking.bookingDateTime),
+          booking.transactionId || "",
+          booking.isCompleted ? "Yes" : "No",
+          booking.formFilingDateTime
+            ? new Date(Number(booking.formFilingDateTime)).toLocaleString()
+            : "",
+        ]),
+      ];
+      const csv = rows.map((row) => row.map(escapeCsv).join(",")).join("\r\n");
+      const blob = new Blob(["\uFEFF" + csv], {
+        type: "text/csv;charset=utf-8;",
+      });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `bookings-${dateString}.csv`;
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      URL.revokeObjectURL(url);
+      showSuccess("Bookings data downloaded successfully.");
+    } catch (err) {
+      console.error("Error downloading bookings:", err);
+      setError("Failed to download bookings data.");
+    }
+  };
 
-  // Sort both arrays
-  const sortedPastBookings = sortBookings(pastBookings);
-  const sortedUpcomingBookings = sortBookings(upcomingBookings);
+  const pastBookings = useMemo(
+    () =>
+      bookings.filter((booking) => {
+        const date = new Date(booking.bookingDateTime).getTime();
+        return Number.isFinite(date) && date < todayStart;
+      }),
+    [bookings, todayStart],
+  );
 
-  const renderBookingsTable = (bookingsToDisplay) => {
-    if (bookingsToDisplay.length === 0) {
+  const upcomingBookings = useMemo(
+    () =>
+      bookings.filter((booking) => {
+        const date = new Date(booking.bookingDateTime).getTime();
+        return !Number.isFinite(date) || date >= todayStart;
+      }),
+    [bookings, todayStart],
+  );
+
+  const bookingsForTab = activeTab === "past" ? pastBookings : upcomingBookings;
+
+  const filteredAndSortedBookings = useMemo(() => {
+    const query = search.trim().toLowerCase();
+    const filtered = bookingsForTab.filter((booking) => {
+      const values = [
+        booking.name,
+        booking.phone,
+        booking.transactionId,
+        booking.time,
+        booking.isCompleted ? "completed" : "pending",
+      ];
       return (
-        <div className="text-center p-10">
-          <p className="text-lg text-gray-600">No bookings found</p>
+        !query ||
+        values.some((value) =>
+          String(value ?? "")
+            .toLowerCase()
+            .includes(query),
+        )
+      );
+    });
+    return filtered.sort((a, b) => {
+      switch (sortBy) {
+        case "oldest":
+          return getBookingTimestamp(a) - getBookingTimestamp(b);
+        case "bookingNewest":
+          return (
+            new Date(b.bookingDateTime).getTime() -
+            new Date(a.bookingDateTime).getTime()
+          );
+        case "bookingOldest":
+          return (
+            new Date(a.bookingDateTime).getTime() -
+            new Date(b.bookingDateTime).getTime()
+          );
+        case "nameAsc":
+          return String(a.name || "").localeCompare(String(b.name || ""));
+        case "nameDesc":
+          return String(b.name || "").localeCompare(String(a.name || ""));
+        case "newest":
+        default:
+          return getBookingTimestamp(b) - getBookingTimestamp(a);
+      }
+    });
+  }, [bookingsForTab, search, sortBy]);
+
+  const renderCopyButton = (value, label) => (
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon"
+      className="h-7 w-7 shrink-0"
+      title={`Copy ${label}`}
+      aria-label={`Copy ${label}`}
+      onClick={() => copyText(value, label)}
+      disabled={!value}
+    >
+      <Copy className="h-3.5 w-3.5" />
+    </Button>
+  );
+
+  const renderBookingsTable = () => {
+    if (!filteredAndSortedBookings.length) {
+      return (
+        <div className="rounded-md border p-10 text-center text-gray-500">
+          No bookings match your search.
         </div>
       );
     }
 
     return (
-      <div className="overflow-x-auto">
-        <Table>
+      <div className="w-full overflow-x-auto rounded-md border">
+        <Table className="min-w-[1180px] border-collapse">
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[200px]">Name</TableHead>
-              <TableHead className="w-[150px]">Phone</TableHead>
-              <TableHead className="w-[120px]">Date</TableHead>
-              <TableHead className="w-[80px]">Time</TableHead>
-              <TableHead className="w-[100px] text-right">Actions</TableHead>
+              <TableHead className="border-r bg-muted">Name</TableHead>
+              <TableHead className="border-r bg-muted">Phone</TableHead>
+              <TableHead className="border-r bg-muted min-w-[150px]">
+                Transaction ID
+              </TableHead>
+              <TableHead className="border-r bg-muted">Date</TableHead>
+              <TableHead className="border-r bg-muted">Aarti Time</TableHead>
+              <TableHead className="border-r bg-muted">Submitted</TableHead>
+              <TableHead className=" border-l bg-muted text-center">
+                status
+              </TableHead>
+
+              <TableHead className="border-l bg-muted text-center">Details</TableHead>
+              <TableHead className="w-[76px] border-l border-r bg-muted text-center">
+                Edit
+              </TableHead>
+              <TableHead className="w-[76px]border-l border-r bg-muted text-center">
+                Delete
+              </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
-            {bookingsToDisplay.map((booking) => (
-              <TableRow className="text-left" key={booking._id}>
-                <TableCell className="font-medium ">{booking.name}</TableCell>
-                <TableCell>{booking.phone}</TableCell>
-                <TableCell>{formatDate(booking.bookingDateTime)}</TableCell>
-                <TableCell>
+            {filteredAndSortedBookings.map((booking) => (
+              <TableRow
+                key={booking._id}
+                className={booking.isCompleted ? "bg-green-50/50" : ""}
+              >
+                <TableCell className="border-r font-medium">
+                  {booking.name || "—"}
+                </TableCell>
+                <TableCell className="border-r">
+                  <div className="flex items-center gap-1 whitespace-nowrap">
+                    <span>{booking.phone || "—"}</span>
+                    {renderCopyButton(booking.phone, "phone number")}
+                  </div>
+                </TableCell>
+                <TableCell className="border-r">
+                  <div className="flex items-center gap-1">
+                    <span
+                      className="max-w-[190px] truncate font-mono text-xs"
+                      title={booking.transactionId || ""}
+                    >
+                      {booking.transactionId || "—"}
+                    </span>
+                    {renderCopyButton(booking.transactionId, "transaction ID")}
+                  </div>
+                </TableCell>
+                <TableCell className="border-r whitespace-nowrap">
+                  {formatDate(booking.bookingDateTime)}
+                </TableCell>
+                <TableCell className="border-r whitespace-nowrap">
                   {booking.time || formatTime(booking.bookingDateTime)}
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="flex justify-end gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => openViewModal(booking)}
-                      title="View Details"
-                    >
-                      <Eye className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => openEditModal(booking)}
-                      title="Edit Booking"
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      onClick={() => openDeleteModal(booking)}
-                      title="Delete Booking"
-                      className="text-red-500 hover:bg-red-50"
-                    >
-                      <Trash className="h-4 w-4" />
-                    </Button>
+
+                <TableCell className="border-r border-l whitespace-nowrap text-xs text-muted-foreground">
+                  {booking.formFilingDateTime
+                    ? new Date(
+                        Number(booking.formFilingDateTime),
+                      ).toLocaleString()
+                    : "—"}
+                </TableCell>
+
+                <TableCell className=" border-l border-r bg-background text-center">
+                  <div className="flex items-center justify-center gap-2">
+                    <Switch
+                      checked={Boolean(booking.isCompleted)}
+                      onCheckedChange={(checked) =>
+                        handleCompletionChange(booking, checked)
+                      }
+                      disabled={Boolean(savingId)}
+                      aria-label={`Mark ${booking.name || "booking"} as ${booking.isCompleted ? "pending" : "completed"}`}
+                    />
                   </div>
+                </TableCell>
+                <TableCell className="border-r text-center">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title="View details"
+                    onClick={() => openViewModal(booking)}
+                  >
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+                <TableCell className=" border-r bg-background text-center">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title="Edit booking"
+                    onClick={() => openEditModal(booking)}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                </TableCell>
+                <TableCell className=" border-r bg-background text-center">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    title="Delete booking"
+                    className="text-red-600 hover:bg-red-50"
+                    onClick={() => openDeleteModal(booking)}
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -1526,271 +642,489 @@ export default function BookingsManagement() {
     );
   };
 
+  const copyField = (value, label) => (
+    <div className="flex min-w-0 items-center gap-1">
+      <span className="break-all">{value || "—"}</span>
+      {renderCopyButton(value, label)}
+    </div>
+  );
+
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between flex-wrap gap-2">
-        <CardTitle>Bookings Management</CardTitle>
-        <div className="flex flex-wrap gap-2">
-          <Button
-            onClick={downloadBookingsData}
-            variant="outline"
-            className="flex items-center gap-2"
+    <>
+      {success && (
+        <div
+          role="status"
+          aria-live="polite"
+          className="fixed right-4 top-4 z-[100] flex max-w-[calc(100vw-2rem)] items-center gap-3 rounded-xl border border-green-300 bg-green-50 px-4 py-3 text-sm font-medium text-green-800 shadow-xl sm:right-6 sm:top-6"
+        >
+          <CheckCircle2 className="h-5 w-5 shrink-0" />
+          <span>{success}</span>
+          <button
+            type="button"
+            className="ml-2 rounded p-1 hover:bg-green-100"
+            onClick={() => setSuccess("")}
+            aria-label="Dismiss notification"
           >
-            <Download className="h-4 w-4" />
-            Download Data
-          </Button>
-          <Button
-            onClick={() => setIsDeletePastModalOpen(true)}
-            variant="outline"
-            className="flex items-center gap-2 text-red-500 hover:bg-red-50"
-            disabled={pastBookings.length === 0}
-          >
-            <CalendarX className="h-4 w-4" />
-            Delete Past Bookings
-          </Button>
-          <Button
-            onClick={fetchBookings}
-            variant="outline"
-            className="flex items-center gap-2"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </Button>
+            <X className="h-4 w-4" />
+          </button>
         </div>
-      </CardHeader>
-      <CardContent>
-        {error && (
-          <Alert variant="destructive" className="mb-4">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+      )}
+      <Card className="w-full">
+        <CardHeader className="flex flex-row flex-wrap items-center justify-between gap-3">
+          <CardTitle>Bookings Management</CardTitle>
+          <div className="flex flex-wrap gap-2">
+            <Button
+              onClick={downloadBookingsData}
+              variant="outline"
+              className="gap-2"
+            >
+              <Download className="h-4 w-4" />
+              Download Data
+            </Button>
+            <Button
+              onClick={() => setIsDeletePastModalOpen(true)}
+              variant="outline"
+              className="gap-2 text-red-600 hover:bg-red-50"
+              disabled={pastBookings.length === 0}
+            >
+              <CalendarX className="h-4 w-4" />
+              Delete Past ({pastBookings.length})
+            </Button>
+            <Button
+              onClick={() => setIsDeleteAllModalOpen(true)}
+              variant="destructive"
+              className="gap-2"
+              disabled={bookings.length === 0}
+            >
+              <Trash2 className="h-4 w-4" />
+              Delete All
+            </Button>
+            <Button
+              onClick={() => fetchBookings()}
+              variant="outline"
+              className="gap-2"
+              disabled={loading}
+            >
+              <RefreshCw
+                className={`h-4 w-4 ${loading ? "animate-spin" : ""}`}
+              />
+              Refresh
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent>
+          {error && (
+            <Alert variant="destructive" className="mb-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <div className="mb-4 grid gap-3 sm:grid-cols-[minmax(220px,1fr)_220px]">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                value={search}
+                onChange={(event) => setSearch(event.target.value)}
+                placeholder="Search name, phone, transaction ID, status..."
+                className="pl-9"
+                aria-label="Search bookings"
+              />
+            </div>
+            <Select value={sortBy} onValueChange={setSortBy}>
+              <SelectTrigger aria-label="Sort bookings">
+                <SelectValue placeholder="Sort bookings" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="newest">
+                  Newest submitted first (default)
+                </SelectItem>
+                <SelectItem value="oldest">Oldest submitted first</SelectItem>
+                <SelectItem value="bookingNewest">
+                  Latest booking date first
+                </SelectItem>
+                <SelectItem value="bookingOldest">
+                  Earliest booking date first
+                </SelectItem>
+                <SelectItem value="nameAsc">Name A–Z</SelectItem>
+                <SelectItem value="nameDesc">Name Z–A</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-        {success && (
-          <Alert
-            variant="default"
-            className="mb-4 bg-green-50 text-green-800 border-green-200"
-          >
-            <AlertDescription>{success}</AlertDescription>
-          </Alert>
-        )}
+          {loading ? (
+            <div className="p-8 text-center text-muted-foreground">
+              Loading bookings...
+            </div>
+          ) : (
+            <Tabs
+              value={activeTab}
+              onValueChange={setActiveTab}
+              className="w-full"
+            >
+              <TabsList className="mb-5 grid w-full grid-cols-2">
+                <TabsTrigger value="upcoming">
+                  Upcoming ({upcomingBookings.length})
+                </TabsTrigger>
+                <TabsTrigger value="past">
+                  Past ({pastBookings.length})
+                </TabsTrigger>
+              </TabsList>
+              <TabsContent value="upcoming">
+                {renderBookingsTable()}
+              </TabsContent>
+              <TabsContent value="past">{renderBookingsTable()}</TabsContent>
+            </Tabs>
+          )}
+        </CardContent>
 
-        {loading ? (
-          <div className="text-center p-6">Loading bookings...</div>
-        ) : (
-          <Tabs
-            value={activeTab}
-            onValueChange={setActiveTab}
-            className="w-full"
-          >
-            <TabsList className="grid w-full grid-cols-2 mb-6">
-              <TabsTrigger value="upcoming">
-                Upcoming Bookings ({sortedUpcomingBookings.length})
-              </TabsTrigger>
-              <TabsTrigger value="past">
-                Past Bookings ({sortedPastBookings.length})
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="upcoming">
-              {renderBookingsTable(sortedUpcomingBookings)}
-            </TabsContent>
-            <TabsContent value="past">
-              {renderBookingsTable(sortedPastBookings)}
-            </TabsContent>
-          </Tabs>
-        )}
-      </CardContent>
-
-      {/* View Booking Modal */}
-      <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Booking Details</DialogTitle>
-          </DialogHeader>
-          {currentBooking && (
-            <div className="space-y-4">
-              <div className="grid grid-cols-3 gap-2">
-                <div className="font-semibold">Name:</div>
-                <div className="col-span-2">{currentBooking.name}</div>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="font-semibold">Phone:</div>
-                <div className="col-span-2">{currentBooking.phone}</div>
-              </div>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="font-semibold">Date:</div>
-                <div className="col-span-2">
-                  {formatDate(currentBooking.bookingDateTime)}
+        <Dialog open={isViewModalOpen} onOpenChange={setIsViewModalOpen}>
+          <DialogContent className="max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Booking Details</DialogTitle>
+            </DialogHeader>
+            {currentBooking && (
+              <div className="space-y-4 text-sm">
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Name</span>
+                  <span className="break-words">
+                    {currentBooking.name || "—"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Phone</span>
+                  {copyField(currentBooking.phone, "phone number")}
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Date</span>
+                  <span>{formatDate(currentBooking.bookingDateTime)}</span>
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Time</span>
+                  <span>
+                    {currentBooking.time ||
+                      formatTime(currentBooking.bookingDateTime)}
+                  </span>
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Transaction ID</span>
+                  {copyField(currentBooking.transactionId, "transaction ID")}
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-start gap-2">
+                  <span className="font-semibold">Submitted</span>
+                  <span>
+                    {currentBooking.formFilingDateTime
+                      ? new Date(
+                          Number(currentBooking.formFilingDateTime),
+                        ).toLocaleString()
+                      : "—"}
+                  </span>
+                </div>
+                <div className="grid grid-cols-[110px_minmax(0,1fr)] items-center gap-2">
+                  <span className="font-semibold">Status</span>
+                  <span
+                    className={`inline-flex w-fit items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold ${currentBooking.isCompleted ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-800"}`}
+                  >
+                    {currentBooking.isCompleted ? (
+                      <>
+                        <Check className="h-3 w-3" />
+                        Completed
+                      </>
+                    ) : (
+                      <>
+                        <X className="h-3 w-3" />
+                        Pending
+                      </>
+                    )}
+                  </span>
                 </div>
               </div>
-              <div className="grid grid-cols-3 gap-2">
-                <div className="font-semibold">Time:</div>
-                <div className="col-span-2">
+            )}
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsViewModalOpen(false)}
+              >
+                Close
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
+          <DialogContent className="max-h-[90dvh] overflow-y-auto sm:max-w-lg">
+            <DialogHeader>
+              <DialogTitle>Edit Booking</DialogTitle>
+              <DialogDescription>
+                Update booking information and completion status.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="grid gap-4 py-2">
+              <div className="grid gap-2">
+                <Label htmlFor="edit-name">Name</Label>
+                <Input
+                  id="edit-name"
+                  value={editedBooking.name}
+                  onChange={(event) =>
+                    setEditedBooking((previous) => ({
+                      ...previous,
+                      name: event.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-phone">Phone</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="edit-phone"
+                    value={editedBooking.phone}
+                    onChange={(event) =>
+                      setEditedBooking((previous) => ({
+                        ...previous,
+                        phone: event.target.value,
+                      }))
+                    }
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    title="Copy phone number"
+                    onClick={() =>
+                      copyText(editedBooking.phone, "phone number")
+                    }
+                    disabled={!editedBooking.phone}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-transaction">Transaction ID / UTR</Label>
+                <div className="flex gap-2">
+                  <Input
+                    id="edit-transaction"
+                    value={editedBooking.transactionId}
+                    onChange={(event) =>
+                      setEditedBooking((previous) => ({
+                        ...previous,
+                        transactionId: event.target.value,
+                      }))
+                    }
+                  />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="icon"
+                    title="Copy transaction ID"
+                    onClick={() =>
+                      copyText(editedBooking.transactionId, "transaction ID")
+                    }
+                    disabled={!editedBooking.transactionId}
+                  >
+                    <Copy className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-date">Date</Label>
+                <Input
+                  id="edit-date"
+                  type="date"
+                  value={editedBooking.bookingDate}
+                  onChange={(event) =>
+                    setEditedBooking((previous) => ({
+                      ...previous,
+                      bookingDate: event.target.value,
+                    }))
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="edit-time">Time</Label>
+                <Select
+                  value={editedBooking.time}
+                  onValueChange={(value) =>
+                    setEditedBooking((previous) => ({
+                      ...previous,
+                      time: value,
+                    }))
+                  }
+                >
+                  <SelectTrigger id="edit-time">
+                    <SelectValue placeholder="Select time" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TIME_OPTIONS.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {time}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-3">
+                <div>
+                  <Label htmlFor="edit-completed" className="font-semibold">
+                    Mark as completed
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Switch on when this booking is complete.
+                  </p>
+                </div>
+                <Switch
+                  id="edit-completed"
+                  checked={Boolean(editedBooking.isCompleted)}
+                  onCheckedChange={(checked) =>
+                    setEditedBooking((previous) => ({
+                      ...previous,
+                      isCompleted: checked,
+                    }))
+                  }
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsEditModalOpen(false)}
+                disabled={Boolean(savingId)}
+              >
+                Cancel
+              </Button>
+              <Button onClick={handleEdit} disabled={Boolean(savingId)}>
+                {savingId ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Saving...
+                  </>
+                ) : (
+                  "Save Changes"
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
+        <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>
+                Are you sure you want to delete this booking?
+              </DialogTitle>
+              <DialogDescription>
+                This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            {currentBooking && (
+              <div className="my-2 space-y-1 rounded-md border p-3 text-sm">
+                <p>
+                  <span className="font-medium">Name:</span>{" "}
+                  {currentBooking.name}
+                </p>
+                <p>
+                  <span className="font-medium">Phone:</span>{" "}
+                  {currentBooking.phone}
+                </p>
+                <p>
+                  <span className="font-medium">Transaction ID:</span>{" "}
+                  {currentBooking.transactionId || "—"}
+                </p>
+                <p>
+                  <span className="font-medium">Date:</span>{" "}
+                  {formatDate(currentBooking.bookingDateTime)} ·{" "}
                   {currentBooking.time ||
                     formatTime(currentBooking.bookingDateTime)}
-                </div>
+                </p>
               </div>
-              {currentBooking.transactionId && (
-                <div className="grid grid-cols-3 gap-2">
-                  <div className="font-semibold">Transaction ID:</div>
-                  <div className="col-span-2">
-                    {currentBooking.transactionId}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-          <DialogFooter>
-            <DialogClose asChild>
-              <Button variant="outline">Close</Button>
-            </DialogClose>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-
-      {/* Edit Booking Modal */}
-      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Edit Booking</DialogTitle>
-            <DialogDescription>
-              Make changes to the booking information below.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="grid gap-4 py-4">
-            <div className="grid gap-2">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                id="name"
-                value={editedBooking.name || ""}
-                onChange={(e) =>
-                  setEditedBooking({ ...editedBooking, name: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="phone">Phone</Label>
-              <Input
-                id="phone"
-                value={editedBooking.phone || ""}
-                onChange={(e) =>
-                  setEditedBooking({ ...editedBooking, phone: e.target.value })
-                }
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="bookingDate">Date</Label>
-              <Input
-                id="bookingDate"
-                type="date"
-                value={editedBooking.bookingDate || ""}
-                onChange={(e) =>
-                  setEditedBooking({
-                    ...editedBooking,
-                    bookingDate: e.target.value,
-                  })
-                }
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="time">Time</Label>
-              <Select
-                value={editedBooking.time || "5 AM"}
-                onValueChange={(value) =>
-                  setEditedBooking({ ...editedBooking, time: value })
-                }
+            )}
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsDeleteModalOpen(false)}
+                disabled={deleting}
               >
-                <SelectTrigger id="time">
-                  <SelectValue placeholder="Select time" />
-                </SelectTrigger>
-                <SelectContent>
-                  {timeOptions.map((time) => (
-                    <SelectItem key={time} value={time}>
-                      {time}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setIsEditModalOpen(false)}>
-              Cancel
-            </Button>
-            <Button onClick={handleEdit}>Save Changes</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDelete}
+                disabled={deleting}
+              >
+                {deleting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  "Yes, Delete"
+                )}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-      {/* Delete Confirmation Modal */}
-      <Dialog open={isDeleteModalOpen} onOpenChange={setIsDeleteModalOpen}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Confirm Deletion</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete this booking? This action cannot
-              be undone.
-            </DialogDescription>
-          </DialogHeader>
-          {currentBooking && (
-            <div className="py-3 border-t border-b my-4">
-              <p>
-                <span className="font-medium">Name:</span> {currentBooking.name}
-              </p>
-              <p>
-                <span className="font-medium">Phone:</span>{" "}
-                {currentBooking.phone}
-              </p>
-              <p>
-                <span className="font-medium">Date:</span>{" "}
-                {formatDate(currentBooking.bookingDateTime)}
-              </p>
-              <p>
-                <span className="font-medium">Time:</span>{" "}
-                {currentBooking.time ||
-                  formatTime(currentBooking.bookingDateTime)}
-              </p>
-            </div>
-          )}
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDeleteModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDelete}>
-              Delete
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+        <Dialog
+          open={isDeletePastModalOpen}
+          onOpenChange={setIsDeletePastModalOpen}
+        >
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Delete past bookings?</DialogTitle>
+              <DialogDescription>
+                This will permanently delete all {pastBookings.length} bookings
+                dated before today. This action cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsDeletePastModalOpen(false)}
+                disabled={deleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeletePastBookings}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Yes, Delete Past Bookings"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
 
-      {/* Delete Past Bookings Confirmation Modal */}
-      <Dialog
-        open={isDeletePastModalOpen}
-        onOpenChange={setIsDeletePastModalOpen}
-      >
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>Delete Past Bookings</DialogTitle>
-            <DialogDescription>
-              Are you sure you want to delete all bookings before today (
-              {pastBookings.length} bookings)? This action cannot be undone.
-            </DialogDescription>
-          </DialogHeader>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsDeletePastModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button variant="destructive" onClick={handleDeletePastBookings}>
-              Delete All Past Bookings
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </Card>
+        <Dialog
+          open={isDeleteAllModalOpen}
+          onOpenChange={setIsDeleteAllModalOpen}
+        >
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Delete ALL bookings?</DialogTitle>
+              <DialogDescription className="font-medium text-red-600">
+                You are about to permanently delete all {bookings.length}{" "}
+                bookings. This cannot be undone.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <Button
+                variant="outline"
+                onClick={() => setIsDeleteAllModalOpen(false)}
+                disabled={deleting}
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="destructive"
+                onClick={handleDeleteAllBookings}
+                disabled={deleting}
+              >
+                {deleting ? "Deleting..." : "Yes, Delete All Bookings"}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+      </Card>
+    </>
   );
 }
